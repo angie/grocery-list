@@ -1,9 +1,3 @@
-import express from 'express';
+import app from './src/server';
 
-const app = express();
-
-app.get('/', (req, res) => {
-  res.send('Hello World');
-});
-
-app.listen(3017);
+app.listen(3017, () => console.log('backend started'));
