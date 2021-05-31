@@ -15,11 +15,16 @@ export const initApp = (items = {}) => {
   app.post('/items', (req, res) => {
     const id = uuidv4();
     const { body } = req;
+
+    if (!body.label) {
+      return res.sendStatus(400);
+    }
+
     const newItem = { id, label: body.label, isPurchased: false };
 
     app.locals.items[id] = newItem;
 
-    res.status(201).location(`http://localhost:3017/items/${id}`).send(newItem);
+    return res.status(201).location(`http://localhost:3017/items/${id}`).send(newItem);
   });
 
   return app;
