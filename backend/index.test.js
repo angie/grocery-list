@@ -68,6 +68,16 @@ describe('updating items', () => {
 
     expect(response.statusCode).toBe(404);
   });
+
+  it('should ignore unknown item properties', async () => {
+    const response = await request
+      .put('/items/1')
+      .set('content-type', 'application/json')
+      .send({ id: 'new-id', size: 'large' });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual(defaultItems['1']);
+  });
 });
 
 describe('deleting items', () => {
