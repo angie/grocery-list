@@ -6,10 +6,10 @@ export const initApp = (items = {}) => {
 
   app.use(express.json());
 
-  app.locals.items = items;
+  app.locals.items = { ...items };
 
   app.get('/items', (_, res) => {
-    res.send(app.locals.items);
+    res.send(Object.values(app.locals.items));
   });
 
   app.post('/items', (req, res) => {
@@ -25,6 +25,20 @@ export const initApp = (items = {}) => {
     app.locals.items[id] = newItem;
 
     return res.status(201).location(`http://localhost:3017/items/${id}`).send(newItem);
+  });
+
+  app.delete('/items/:id', (req, res) => {
+    const {
+      params: { id },
+    } = req;
+
+    if (!app.locals.items[id]) {
+      return res.sendStatus(404);
+    }
+
+    delete app.locals.items[id];
+
+    return res.sendStatus(204);
   });
 
   return app;

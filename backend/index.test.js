@@ -8,17 +8,18 @@ const defaultItems = {
   2: { id: '2', label: 'apples', isPurchased: true },
 };
 
+let app;
 let request;
 
 beforeEach(() => {
-  const app = initApp(defaultItems);
+  app = initApp(defaultItems);
   request = supertest(app);
 });
 
 describe('backend tests', () => {
   it('should return a grocery list', async () => {
     const response = await request.get('/items');
-    expect(response.body).toEqual(defaultItems);
+    expect(response.body).toEqual(Object.values(defaultItems));
   });
 
   it('should add a new item to the grocery list', async () => {
@@ -36,5 +37,18 @@ describe('backend tests', () => {
     const response = await request.post('/items').set('content-type', 'application/json').send({});
 
     expect(response.statusCode).toBe(400);
+  });
+
+  it('should delete an item by ID', async () => {
+    const response = await request.delete('/items/1');
+
+    expect(response.statusCode).toBe(204);
+    expect(app.locals.items[1]).toBeUndefined();
+  });
+
+  it('should return an error when attempting to delete a non-existent item by ID', async () => {
+    const response = await request.delete('/items/bobbins');
+
+    expect(response.statusCode).toBe(404);
   });
 });
