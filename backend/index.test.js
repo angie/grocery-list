@@ -17,6 +17,13 @@ beforeEach(() => {
 });
 
 describe('backend tests', () => {
+  it('should initialise app with an empty grocery list', async () => {
+    const freshApp = initApp();
+
+    const response = await supertest(freshApp).get('/items');
+    expect(response.body).toEqual([]);
+  });
+
   it('should return a grocery list', async () => {
     const response = await request.get('/items');
     expect(response.body).toEqual(Object.values(defaultItems));
