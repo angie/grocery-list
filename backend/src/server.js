@@ -1,13 +1,15 @@
 import express from 'express';
 
-const app = express();
+export const initApp = (items = {}) => {
+  const app = express();
 
-app.get('/', (req, res) => {
-  res.send('Hello World');
-});
+  app.use(express.json());
 
-app.get('/items', (_, res) => {
-  res.send([{ id: '1', isPurchased: false, label: 'cheese' }]);
-});
+  app.locals.items = items;
 
-export default app;
+  app.get('/items', (_, res) => {
+    res.send(app.locals.items);
+  });
+
+  return app;
+};
