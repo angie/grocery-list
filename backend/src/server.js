@@ -1,15 +1,22 @@
 import express from 'express';
+import cors from 'cors';
 import { v4 as uuidv4 } from 'uuid';
 
 export const initApp = (items = {}) => {
   const app = express();
+
+  app.use(
+    cors({
+      origin: 'http://localhost:1234',
+    })
+  );
 
   app.use(express.json());
 
   app.locals.items = { ...items };
 
   app.get('/items', (_, res) => {
-    res.send(Object.values(app.locals.items));
+    res.send(Object.values(app.locals.items)).set('cache-control', 'max-age=500');
   });
 
   app.post('/items', (req, res) => {
