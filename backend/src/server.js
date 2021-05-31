@@ -27,6 +27,29 @@ export const initApp = (items = {}) => {
     return res.status(201).location(`http://localhost:3017/items/${id}`).send(newItem);
   });
 
+  app.put('/items/:id', (req, res) => {
+    const {
+      body,
+      params: { id },
+    } = req;
+
+    const item = app.locals.items[id];
+
+    if (!item) {
+      return res.sendStatus(404);
+    }
+
+    const updated = {
+      ...item,
+      label: body.label ?? item.label,
+      isPurchased: body.isPurchased ?? item.isPurchased,
+    };
+
+    app.locals.items[id] = updated;
+
+    return res.status(200).send(updated);
+  });
+
   app.delete('/items/:id', (req, res) => {
     const {
       params: { id },

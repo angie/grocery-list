@@ -58,4 +58,23 @@ describe('backend tests', () => {
 
     expect(response.statusCode).toBe(404);
   });
+
+  it('should update the purchased status of an existing item', async () => {
+    const response = await request
+      .put('/items/2')
+      .set('content-type', 'application/json')
+      .send({ isPurchased: false });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual({ id: '2', label: 'apples', isPurchased: false });
+  });
+
+  it('should return an error when attempting to update a non-existent item', async () => {
+    const response = await request
+      .put('/items/hello')
+      .set('content-type', 'application/json')
+      .send({ isPurchased: true });
+
+    expect(response.statusCode).toBe(404);
+  });
 });
