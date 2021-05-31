@@ -16,7 +16,7 @@ beforeEach(() => {
   request = supertest(app);
 });
 
-describe('backend tests', () => {
+describe('retrieving items', () => {
   it('should initialise app with an empty grocery list', async () => {
     const freshApp = initApp();
 
@@ -28,7 +28,9 @@ describe('backend tests', () => {
     const response = await request.get('/items');
     expect(response.body).toEqual(Object.values(defaultItems));
   });
+});
 
+describe('adding new items', () => {
   it('should add a new item to the grocery list', async () => {
     const response = await request
       .post('/items')
@@ -45,20 +47,9 @@ describe('backend tests', () => {
 
     expect(response.statusCode).toBe(400);
   });
+});
 
-  it('should delete an item by ID', async () => {
-    const response = await request.delete('/items/1');
-
-    expect(response.statusCode).toBe(204);
-    expect(app.locals.items[1]).toBeUndefined();
-  });
-
-  it('should return an error when attempting to delete a non-existent item by ID', async () => {
-    const response = await request.delete('/items/bobbins');
-
-    expect(response.statusCode).toBe(404);
-  });
-
+describe('updating items', () => {
   it('should update the purchased status of an existing item', async () => {
     const response = await request
       .put('/items/2')
@@ -74,6 +65,21 @@ describe('backend tests', () => {
       .put('/items/hello')
       .set('content-type', 'application/json')
       .send({ isPurchased: true });
+
+    expect(response.statusCode).toBe(404);
+  });
+});
+
+describe('deleting items', () => {
+  it('should delete an item by ID', async () => {
+    const response = await request.delete('/items/1');
+
+    expect(response.statusCode).toBe(204);
+    expect(app.locals.items[1]).toBeUndefined();
+  });
+
+  it('should return an error when attempting to delete a non-existent item by ID', async () => {
+    const response = await request.delete('/items/bobbins');
 
     expect(response.statusCode).toBe(404);
   });
