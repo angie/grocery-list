@@ -77,4 +77,42 @@ describe('Grocery list frontend tests', () => {
       })
     ).toBeChecked();
   });
+
+  it('should let a user add a new item to their grocery list', async () => {
+    const newItem = {
+      id: 'id-2',
+      label: 'milk',
+      isPurchased: true,
+    };
+
+    // initial fetch
+    axios.get.mockImplementationOnce(() => Promise.resolve({ data: [] }));
+    // create new item
+    axios.post.mockImplementationOnce(() => Promise.resolve({ newItem }));
+    // refetch list on success
+    axios.get.mockImplementationOnce(() =>
+      Promise.resolve({
+        data: [newItem],
+      })
+    );
+
+    render(<App />);
+
+    const addInput = screen.getByRole('textbox', {
+      name: /add new item to grocery list/i,
+    });
+
+    userEvent.type(addInput, 'milk');
+    userEvent.click(
+      screen.getByRole('button', {
+        name: /add/i,
+      })
+    );
+
+    expect(
+      await screen.findByRole('checkbox', {
+        name: /milk/i,
+      })
+    ).toBeInTheDocument();
+  });
 });
