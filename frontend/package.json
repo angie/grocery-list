@@ -7,7 +7,7 @@
     "main": false
   },
   "scripts": {
-    "start": "parcel serve ./src/index.html",
+    "start": "parcel serve ./src/index.html --open",
     "build": "parcel build ./src/index.html",
     "test": "jest"
   },
