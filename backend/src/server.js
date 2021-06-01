@@ -16,7 +16,7 @@ export const initApp = (items = {}) => {
   app.locals.items = { ...items };
 
   app.get('/items', (_, res) => {
-    res.send(Object.values(app.locals.items)).set('cache-control', 'max-age=500');
+    res.send(Object.values(app.locals.items));
   });
 
   app.post('/items', (req, res) => {
