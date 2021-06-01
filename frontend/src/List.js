@@ -1,23 +1,33 @@
+import axios from 'axios';
 import React from 'react';
 import { useQuery } from 'react-query';
-import { getGroceryList } from './api/list';
+import ListItem from './ListItem';
 
 const List = () => {
-  const { isLoading, isError, data } = useQuery('items', () => getGroceryList(), { retry: false });
-  return (
-    <main className="container p-6 md:p-10">
-      <h1 className="font-montserrat text-ee-blue text-2xl">Grocery list</h1>
+  const { data, isLoading, isError, isSuccess } = useQuery(
+    'items',
+    () => axios.get('http://localhost:3017/items'),
+    { retry: false }
+  );
 
-      <div className="mt-4">
-        {isError ? 'Error loading grocery list.' : null}
-        {isLoading ? 'Loading grocery list…' : null}
-        <ul>
-          {data?.length
-            ? data.map((item) => <li key={item.id}>{item.label}</li>)
-            : 'No items found'}
-        </ul>
-      </div>
-    </main>
+  if (isError) {
+    return <div className="mt-4">Error loading grocery list.</div>;
+  }
+
+  if (isLoading) {
+    return <div className="mt-4">Loading grocery list…</div>;
+  }
+
+  return (
+    <div className="mt-4">
+      <ul>
+        {isSuccess && data?.data?.length
+          ? data.data.map(({ id, isPurchased, label }) => (
+              <ListItem key={id} id={id} label={label} isPurchased={isPurchased} />
+            ))
+          : 'No items found'}
+      </ul>
+    </div>
   );
 };
 

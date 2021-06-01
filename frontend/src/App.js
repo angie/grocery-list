@@ -7,7 +7,10 @@ import './main.css';
 const App = () => (
   <QueryClientProvider client={new QueryClient()}>
     <Header />
-    <List />
+    <main className="container p-6 md:p-10">
+      <h1 className="font-montserrat text-ee-blue text-2xl">Grocery list</h1>
+      <List />
+    </main>
   </QueryClientProvider>
 );
 

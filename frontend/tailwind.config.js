@@ -1,3 +1,4 @@
+/* eslint-disable */
 module.exports = {
   purge: ['./src/**/*.html', './src/**/*.js'],
   darkMode: false, // or 'media' or 'class'
@@ -14,5 +15,5 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/forms')],
 };
