@@ -1,15 +1,14 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
+import { invalidateCache } from './utils';
 
 const AddItem = () => {
   const [value, setValue] = useState('');
   const queryClient = useQueryClient();
 
   const mutation = useMutation((label) => axios.post('http://localhost:3017/items', { label }), {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries('items');
-    },
+    onSuccess: async () => invalidateCache(queryClient),
   });
   return (
     <form

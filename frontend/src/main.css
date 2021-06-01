@@ -5,7 +5,3 @@
 body {
   @apply font-sans;
 }
-
-.st0 {
-  @apply fill-current text-white;
-}

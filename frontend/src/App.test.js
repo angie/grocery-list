@@ -115,4 +115,43 @@ describe('Grocery list frontend tests', () => {
       })
     ).toBeInTheDocument();
   });
+
+  it('should let a user remove an item from the grocery list', async () => {
+    // initial get
+    axios.get.mockImplementationOnce(() =>
+      Promise.resolve({
+        data: [
+          {
+            id: '805af327-d3bc-4cd4-8157-4ab0962ba34f',
+            label: 'cheese',
+            isPurchased: true,
+          },
+        ],
+      })
+    );
+
+    // delete
+    axios.delete.mockImplementationOnce(() => Promise.resolve());
+
+    // list refresh
+    axios.get.mockImplementationOnce(() =>
+      Promise.resolve({
+        data: [],
+      })
+    );
+
+    render(<App />);
+
+    const getItem = async () => screen.findByText(/cheese/);
+
+    expect(await getItem()).toBeInTheDocument();
+
+    userEvent.click(
+      await screen.findByRole('button', {
+        name: /delete cheese/i,
+      })
+    );
+
+    expect(await getItem()).not.toBeInTheDocument();
+  });
 });
