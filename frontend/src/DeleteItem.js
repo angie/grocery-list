@@ -1,13 +1,11 @@
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { useMutation, useQueryClient } from 'react-query';
-import { invalidateCache } from './utils';
+import useMutateAndRefresh from './useMutateAndRefetch';
 
 const DeleteItem = ({ id, label }) => {
-  const queryClient = useQueryClient();
-  const mutation = useMutation(() => axios.delete(`http://localhost:3017/items/${id}`), {
-    onSuccess: async () => invalidateCache(queryClient),
+  const mutation = useMutateAndRefresh({
+    method: 'delete',
+    url: `http://localhost:3017/items/${id}`,
   });
 
   return (

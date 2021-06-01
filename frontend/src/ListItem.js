@@ -1,19 +1,10 @@
-import React from 'react';
-import axios from 'axios';
 import PropTypes from 'prop-types';
-import { useMutation, useQueryClient } from 'react-query';
-import { invalidateCache } from './utils';
+import React from 'react';
 import DeleteItem from './DeleteItem';
+import useMutateAndRefresh from './useMutateAndRefetch';
 
 const ListItem = ({ id, label, isPurchased }) => {
-  const queryClient = useQueryClient();
-  const mutation = useMutation(
-    ({ status }) => axios.put(`http://localhost:3017/items/${id}`, { isPurchased: status }),
-    {
-      onSuccess: async () => invalidateCache(queryClient),
-    }
-  );
-
+  const mutation = useMutateAndRefresh({ method: 'put', url: `http://localhost:3017/items/${id}` });
   return (
     <div className="flex items-center justify-between mb-4">
       <span>
@@ -23,7 +14,7 @@ const ListItem = ({ id, label, isPurchased }) => {
           checked={isPurchased}
           name={label}
           className="form-checkbox h-6 w-6 border-ee-blue border-2 mr-3 text-ee-blue"
-          onChange={() => mutation.mutate({ id, status: !isPurchased })}
+          onChange={() => mutation.mutate({ isPurchased: !isPurchased })}
         />
         <label className={`${isPurchased ? 'line-through text-gray-400' : ''}`} htmlFor={id}>
           {label}

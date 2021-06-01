@@ -1,21 +1,17 @@
-import axios from 'axios';
 import React, { useState } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
-import { invalidateCache } from './utils';
+import useMutateAndRefresh from './useMutateAndRefetch';
 
 const AddItem = () => {
   const [value, setValue] = useState('');
-  const queryClient = useQueryClient();
 
-  const mutation = useMutation((label) => axios.post('http://localhost:3017/items', { label }), {
-    onSuccess: async () => invalidateCache(queryClient),
-  });
+  const mutation = useMutateAndRefresh({ method: 'post', url: 'http://localhost:3017/items' });
+
   return (
     <form
       className="w-full max-w-sm"
       onSubmit={(e) => {
         e.preventDefault();
-        mutation.mutate(value);
+        mutation.mutate({ label: value });
         setValue('');
         e.target.reset();
       }}
