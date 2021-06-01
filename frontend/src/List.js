@@ -19,7 +19,7 @@ const List = () => {
   }
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 max-w-sm">
       <ul>
         {isSuccess && data?.data?.length
           ? data.data.map(({ id, isPurchased, label }) => (
