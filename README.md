@@ -11,7 +11,7 @@
 
 ```
 nvm use
-./install-full-stack.sh
+npm install
 npm start
 ```
 
