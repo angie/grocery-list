@@ -11,7 +11,7 @@
 
 ```
 nvm use
-npm install
+./install-full-stack.sh
 npm start
 ```
 
@@ -26,3 +26,9 @@ npm test
 ```
 
 This runs front and backend tests with coverage report.
+
+## Functionality
+
+- Add item
+- Mark complete/incomplete
+- Delete item
